@@ -1,5 +1,7 @@
 # CLI To-Do Assistant
 
+[![CI](https://github.com/jrecuero/codex/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jrecuero/codex/actions/workflows/ci.yml)
+
 A beginner-friendly command line to-do app built in Python.
 
 ## Features
@@ -22,8 +24,23 @@ python3 main.py delete 1
 
 ## Development
 
+Install dev dependencies:
+
+```bash
+python3 -m pip install -r requirements-dev.txt
+```
+
 Run tests:
 
 ```bash
 python3 -m pytest -q
 ```
+
+Run docstring lint (Google style):
+
+```bash
+python3 -m pip install -r requirements-dev.txt
+python3 -m pydocstyle .
+```
+
+CI runs docstring lint and tests on every push and pull request.

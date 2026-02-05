@@ -1,3 +1,9 @@
+"""Command-line interface for managing todo items.
+
+Overview:
+    Provides add, list, done, and delete commands backed by TodoStore.
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -7,6 +13,18 @@ from todo_store import TodoStore
 
 
 def add_task(store: TodoStore, text: str) -> str:
+    """Add a new task to the store.
+
+    Args:
+        store: TodoStore used for persistence.
+        text: Task description.
+
+    Returns:
+        A human-readable confirmation message.
+
+    Side Effects:
+        Reads from and writes to the filesystem via TodoStore.
+    """
     items = store.load()
     task = TodoItem.new(id=store.next_id(items), text=text)
     items.append(task)
@@ -15,6 +33,17 @@ def add_task(store: TodoStore, text: str) -> str:
 
 
 def list_tasks(store: TodoStore) -> str:
+    """Return a formatted list of tasks.
+
+    Args:
+        store: TodoStore used for persistence.
+
+    Returns:
+        A formatted string of tasks, or a no-tasks message.
+
+    Side Effects:
+        Reads from the filesystem via TodoStore.
+    """
     items = store.load()
     if not items:
         return "No tasks yet."
@@ -27,6 +56,18 @@ def list_tasks(store: TodoStore) -> str:
 
 
 def done_task(store: TodoStore, task_id: int) -> str:
+    """Mark a task as completed.
+
+    Args:
+        store: TodoStore used for persistence.
+        task_id: Identifier of the task to mark done.
+
+    Returns:
+        A confirmation or not-found message.
+
+    Side Effects:
+        Reads from and writes to the filesystem via TodoStore.
+    """
     items = store.load()
     for item in items:
         if item.id == task_id:
@@ -37,6 +78,18 @@ def done_task(store: TodoStore, task_id: int) -> str:
 
 
 def delete_task(store: TodoStore, task_id: int) -> str:
+    """Delete a task from the store.
+
+    Args:
+        store: TodoStore used for persistence.
+        task_id: Identifier of the task to delete.
+
+    Returns:
+        A confirmation or not-found message.
+
+    Side Effects:
+        Reads from and writes to the filesystem via TodoStore.
+    """
     items = store.load()
     for item in items:
         if item.id == task_id:
@@ -47,6 +100,11 @@ def delete_task(store: TodoStore, task_id: int) -> str:
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Build the CLI argument parser.
+
+    Returns:
+        Configured ArgumentParser instance.
+    """
     parser = argparse.ArgumentParser(description="CLI To-Do Assistant")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -65,6 +123,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> None:
+    """Run the CLI entry point."""
     parser = build_parser()
     args = parser.parse_args()
     store = TodoStore()
